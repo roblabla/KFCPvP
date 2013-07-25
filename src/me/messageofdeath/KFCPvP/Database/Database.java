@@ -4,7 +4,7 @@ public class Database {
 	
 	public static void initDatabase() {
         
-    }
+	}
     
     public static void loadDatabase() {
         
