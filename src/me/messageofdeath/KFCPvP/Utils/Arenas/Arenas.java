@@ -1,4 +1,4 @@
-package me.messageofdeath.KFCPvP.Utils;
+package me.messageofdeath.KFCPvP.Utils.Arenas;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,8 @@ public class Arenas {
     }
     
     public static ArrayList<Arena> getArenas() {
+    	if(arenas == null)
+            arenas = new ArrayList<Arena>();
         return arenas;
     }
     
@@ -30,6 +32,8 @@ public class Arenas {
     }
     
     public static Arena getArena(String name) {
+    	if(arenas == null)
+            arenas = new ArrayList<Arena>();
         for(Arena arena : arenas)
             if(arena.getName().equalsIgnoreCase(name))
                 return arena;

@@ -14,17 +14,21 @@ public enum StatType {
 	
 	
 	
-	KDR(),
+	GamesWon(),
 	
 	
 	
 	
-
-	Ranking(),
+	
+	GamesLost(),
 	
 	
 	
 	
 	
 	PlayingTime();
+	
+	public String getName() {
+		return this.toString();
+	}
 }

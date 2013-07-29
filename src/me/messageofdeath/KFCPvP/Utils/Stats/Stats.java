@@ -1,16 +1,11 @@
 package me.messageofdeath.KFCPvP.Utils.Stats;
 
-import java.util.HashMap;
-
 public class Stats {
 
 	private double amount = 0;
-	private String name;
 	
-	public Stats(String name) {
-		this.name = name;
-	}
-	
+	public Stats() {}
+		
 	public double getAmount() {
 		return this.amount;
 	}
@@ -26,10 +21,4 @@ public class Stats {
 	public void subAmount(double amount) {
 		this.amount -= amount;
 	}
-	
-	//******************** Static ************************
-	
-	private static HashMap<String, Stats> stats = null;
-	
-	
 }

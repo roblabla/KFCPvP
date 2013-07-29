@@ -1,0 +1,8 @@
+# MySQL or YAML
+DatabaseType: MySQL
+Mysql:
+  Host:
+  Port:
+  Database:
+  Username:
+  Password:

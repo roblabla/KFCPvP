@@ -1,10 +1,12 @@
-package me.messageofdeath.KFCPvP.Utils;
+package me.messageofdeath.KFCPvP.Utils.Arenas;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
 import me.messageofdeath.Blocks.Cuboid;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 /**
  * 
@@ -74,20 +76,26 @@ public class Arena {
     }
     
     public void sendMessage(String msg) {
-        for(String player : this.players) {
-            if(isOnline(player))
-                Bukkit.getPlayer(player).sendMessage(msg);
-            else
-                removePlayer(player);
+        for(String player : getPlayers()) {
+        	Bukkit.getPlayer(player).sendMessage(msg);
         }
+        Bukkit.getLogger().log(Level.INFO, "[Arena Debug] ({0}) {1}", new Object[]{this.getName(), ChatColor.stripColor(msg)});
     }
     
-    private boolean isOnline(String name) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(player.getName().equalsIgnoreCase(name))
-                return true;
-        }
-        return false;
+    public void sendToPlate(String name) {
+    	Random rand = new Random();
+    	int i = rand.nextInt(spawns.size());
+    	Bukkit.getPlayer(name).teleport(spawns.get(i));
+    }
+    
+    public void sendToLobby() {
+    	for(String player : getPlayers()) {
+    		Bukkit.getPlayer(player).teleport(lobby);
+    	}
+    }
+    
+    public void sendToLobby(String name) {
+    	Bukkit.getPlayer(name).teleport(lobby);
     }
     
     //****************** Spawns *********************

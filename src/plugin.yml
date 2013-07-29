@@ -1,4 +1,5 @@
 name: KFCPvP
 author: messageofdeath
 version: 1.0
+depend: [messageofdeathLib]
 main: me.messageofdeath.KFCPvP.KFCPvP
