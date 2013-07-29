@@ -3,6 +3,8 @@ package me.messageofdeath.KFCPvP.Utils.Stats;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import me.messageofdeath.KFCPvP.Database.Database;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -56,7 +58,11 @@ public class PlayerStats {
 	}
 	
 	public static void createPlayerStats(String name) {
-		storePlayerStats(new PlayerStats(name));
+		if(Database.hasPlayer(name)) {
+			Database.loadPlayer(name);
+		}else{
+			storePlayerStats(new PlayerStats(name));
+		}
 	}
 	
 	public static PlayerStats getPlayerStats(String name) {

@@ -1,6 +1,7 @@
 package me.messageofdeath.KFCPvP.Database;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,11 +28,11 @@ public class Database {
 		else if(dbType == DatabaseType.MySQL) {
 			table = "KFCPvP_Stats";
         	mdatabase = new MySQLDatabase(KFCPvP.instance,
-        			MySQLSettings.Host.getInformation(),
-        			MySQLSettings.Port.getInformation(),
-        			MySQLSettings.Database.getInformation(),
-        			MySQLSettings.Username.getInformation(),
-        			MySQLSettings.Password.getInformation());
+        			ConfigSettings.Host.getSetting(),
+        			ConfigSettings.Port.getSetting(),
+        			ConfigSettings.Database.getSetting(),
+        			ConfigSettings.Username.getSetting(),
+        			ConfigSettings.Password.getSetting());
         	
         	try{
         		mdatabase.onStartUp();
@@ -53,6 +54,14 @@ public class Database {
         		Bukkit.getLogger().info("Created the table '"+table+"'!");
         	}
         }
+	}
+	
+	public static boolean hasPlayer(String name) {
+		if(dbType == DatabaseType.MySQL)
+			return mdatabase.contains(table, "Player = '"+name+"'");
+		else if(dbType == DatabaseType.YAML)
+			return ydatabase.contains("PlayerStats." + name);
+		return false;
 	}
 	
 	public static void loadPlayer(String name) {
@@ -95,7 +104,7 @@ public class Database {
 		}
 		else if(dbType == DatabaseType.MySQL) {
 			for(PlayerStats player : PlayerStats.getAll()) {
-				if(PlayerStats.getAllString().contains(player.getName())) {
+				if(Database.hasPlayer(player.getName())) {
 					//Update
 					String where = "Player = '"+player.getName()+"'";
 					mdatabase.update(table, StatType.Kills.getName() + " = '" + player.getStat(StatType.Kills).getAmount() + "'", where);
@@ -145,12 +154,15 @@ public class Database {
 	public static void loadConfiguration() {
 		dbType = DatabaseType.parseString(config.getString("DatabaseType", null));
 		if(dbType == DatabaseType.MySQL) {
+			//MySQL
 			String prefix = "MySQL.";
-			MySQLSettings.Host.setInformation(config.getString(prefix + "Host", "localhost"));
-			MySQLSettings.Port.setInformation(config.getString(prefix + "Port", "3306"));
-			MySQLSettings.Database.setInformation(config.getString(prefix + "Database", "minecraft"));
-			MySQLSettings.Username.setInformation(config.getString(prefix + "User", "root"));
-			MySQLSettings.Password.setInformation(config.getString(prefix + "Pass", ""));
+			ConfigSettings.Host.setSetting(config.getString(prefix + "Host", "localhost"));
+			ConfigSettings.Port.setSetting(config.getString(prefix + "Port", "3306"));
+			ConfigSettings.Database.setSetting(config.getString(prefix + "Database", "minecraft"));
+			ConfigSettings.Username.setSetting(config.getString(prefix + "User", "root"));
+			ConfigSettings.Password.setSetting(config.getString(prefix + "Pass", ""));
+			//Worlds
+			ConfigSettings.Worlds.setArraySetting(config.getStringArray("Worlds", new ArrayList<String>()));
 		}
 	}
 	

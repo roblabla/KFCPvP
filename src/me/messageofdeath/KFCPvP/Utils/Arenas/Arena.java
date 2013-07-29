@@ -3,7 +3,8 @@ package me.messageofdeath.KFCPvP.Utils.Arenas;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
-import me.messageofdeath.Blocks.Cuboid;
+import me.messageofdeath.KFCPvP.Utils.WorldManager.World;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,23 +18,22 @@ public class Arena {
     
     private final String name;
     private int maxPlayers, minPlayers, seconds;
-    private boolean gameInProgress, isInLobby;
+    private ArenaStatus arenaStatus;
     private Location lobby;
+    private World world;
     private ArrayList<Location> spawns;
     private ArrayList<String> players;
-    private Cuboid cuboid;
     
-    public Arena(String name, Location lobby, ArrayList<Location> spawns, Cuboid cuboid, int maxPlayers, int minPlayers) {
+    public Arena(String name, Location lobby, ArrayList<Location> spawns, int maxPlayers, int minPlayers) {
         this.name = name;
         this.lobby = lobby;
         this.spawns = spawns;
-        this.cuboid = cuboid;
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
-        this.seconds = 60*2;
-        this.isInLobby = true;
-        this.gameInProgress = false;
+        this.seconds = 60*2;//Start Lobby Time
+        this.arenaStatus = ArenaStatus.inLobby;
         this.players = new ArrayList<String>();
+        this.world = null;
     }
     
     public String getName() {
@@ -115,26 +115,18 @@ public class Arena {
     
     //****************** Boundaries *******************
    
-    public Cuboid getCuboid() {
-        return this.cuboid;
+    public World getWorld() {
+    	return world;
     }
     
     //****************** Game ***********************
     
-    public boolean isGameInProgress() {
-        return this.gameInProgress;
+    public ArenaStatus getGameStatus() {
+    	return this.arenaStatus;
     }
     
-    public void setGameInProgress(boolean set) {
-        this.gameInProgress = set;
-    }
-    
-    public boolean isInLobby() {
-        return this.isInLobby;
-    }
-    
-    public void setIsInLobby(boolean set) {
-        this.isInLobby = set;
+    public void setGameStatus(ArenaStatus arenaStatus) {
+    	this.arenaStatus = arenaStatus;
     }
     
     public int getSeconds() {

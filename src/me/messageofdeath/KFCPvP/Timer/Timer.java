@@ -1,6 +1,7 @@
 package me.messageofdeath.KFCPvP.Timer;
 
 import me.messageofdeath.KFCPvP.Utils.Arenas.Arena;
+import me.messageofdeath.KFCPvP.Utils.Arenas.ArenaStatus;
 import me.messageofdeath.KFCPvP.Utils.Arenas.Arenas;
 import me.messageofdeath.KFCPvP.Utils.Stats.PlayerStats;
 import me.messageofdeath.KFCPvP.Utils.Stats.StatType;
@@ -13,7 +14,7 @@ public class Timer implements Runnable {
     public void run() {
         for(Arena arena : Arenas.getArenas()) {
             int seconds = arena.getSeconds();
-            if(arena.isGameInProgress()) {
+            if(arena.getGameStatus() == ArenaStatus.inGame) {
             	for(String name : arena.getPlayers())
             		PlayerStats.getPlayerStats(name).getStat(StatType.PlayingTime).addAmount(1);
                 if(seconds == 60*5)
@@ -29,15 +30,14 @@ public class Timer implements Runnable {
                 if(seconds == 1)
                     arena.sendMessage(ChatColor.GOLD + "1 second left!");
                 if(seconds == 0) {
-                    //arena.sendPlayersToLobby();
-                    arena.setGameInProgress(false);
-                    arena.setIsInLobby(true);
+                    arena.setGameStatus(ArenaStatus.inLobby);
                     arena.setSeconds(60*2);
+                    //arena.sendPlayersToLobby();
                     //arena.changeMap();
                 }else
                     arena.setSeconds(seconds-1);
             }
-            else if(arena.isInLobby()) {
+            else if(arena.getGameStatus() == ArenaStatus.inLobby) {
                 if(seconds == 60 *2)
                     arena.sendMessage(ChatColor.GOLD + "2 minutes until game starts!");
                 if(seconds == 60)
@@ -51,8 +51,7 @@ public class Timer implements Runnable {
                 if(seconds == 0) {
                     if(arena.getPlayers().size() >= arena.getMinPlayers()) {
                         arena.sendMessage(ChatColor.GOLD + "The Game has started!");
-                        arena.setIsInLobby(false);
-                        arena.setGameInProgress(true);
+                        arena.setGameStatus(ArenaStatus.inGame);
                         //arena.startGame();
                         arena.setSeconds(60 * 10);
                     }else{
