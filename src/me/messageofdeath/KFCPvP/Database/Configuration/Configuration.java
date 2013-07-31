@@ -27,12 +27,8 @@ public class Configuration {
 			
 		
 		if(Database.loadDBType == DatabaseType.MySQL || Database.saveDBType == DatabaseType.Both) {
-			String prefix = "MySQL.";
-			MySQLSettings.Host.setSetting(config.getString(prefix + "Host", "localhost"));
-			MySQLSettings.Port.setSetting(config.getString(prefix + "Port", "3306"));
-			MySQLSettings.Database.setSetting(config.getString(prefix + "Database", "minecraft"));
-			MySQLSettings.Username.setSetting(config.getString(prefix + "User", "root"));
-			MySQLSettings.Password.setSetting(config.getString(prefix + "Pass", ""));
+			for(MySQLSettings settings : MySQLSettings.values())
+				settings.setSetting(config.getString("MySQL." + settings.getName(), settings.getDefaultSetting()));
 		}
 	}
 	

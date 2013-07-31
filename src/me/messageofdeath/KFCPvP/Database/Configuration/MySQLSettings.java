@@ -35,4 +35,18 @@ public enum MySQLSettings {
     public void setSetting(String setting) {
         this.setting = setting;
     }
+    
+    public String getDefaultSetting() {
+    	if(this.getName().equalsIgnoreCase(MySQLSettings.Host.getName()))
+    		return "localhost";
+    	if(this.getName().equalsIgnoreCase(MySQLSettings.Port.getName()))
+    		return "3306";
+    	if(this.getName().equalsIgnoreCase(MySQLSettings.Database.getName()))
+    		return "minecraft";
+    	if(this.getName().equalsIgnoreCase(MySQLSettings.Username.getName()))
+    		return "root";
+    	if(this.getName().equalsIgnoreCase(MySQLSettings.Password.getName()))
+    		return "";
+    	return "";
+    }
 }
