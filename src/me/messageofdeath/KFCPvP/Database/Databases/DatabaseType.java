@@ -1,4 +1,4 @@
-package me.messageofdeath.KFCPvP.Database;
+package me.messageofdeath.KFCPvP.Database.Databases;
 
 public enum DatabaseType {
 
@@ -9,10 +9,39 @@ public enum DatabaseType {
 	
 	
 	
-	YAML();
+	YAML(),
+	
+	
+	
+	
+	
+	
+	Both(),
+	
+	
+	
+	
+	
+	loadType(),
+	
+	
+	
+	
+	
+	saveType();
 	
 	public String getName() {
 		return this.toString();
+	}
+	
+	private DatabaseType dataType;
+	
+	public DatabaseType getDataType() {
+		return dataType;
+	}
+	
+	public void setDataType(DatabaseType dataType) {
+		this.dataType = dataType;
 	}
 	
 	public static DatabaseType parseString(String parse) {
@@ -22,6 +51,8 @@ public enum DatabaseType {
 			return DatabaseType.MySQL;
 		else if(parse.equalsIgnoreCase("yaml") || parse.equalsIgnoreCase("yml"))
 			return DatabaseType.YAML;
+		else if(parse.equalsIgnoreCase("both") || parse.equalsIgnoreCase("all"))
+			return DatabaseType.Both;
 		else
 			return null;
 	}

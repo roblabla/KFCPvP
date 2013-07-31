@@ -1,5 +1,13 @@
 # MySQL or YAML
-DatabaseType: MySQL
+DatabaseType:
+  #Applical units   MySQL  |  YAML
+  Load: YAML
+  #Applical units   MySQL  |  YAML  |  BOTH
+  #Both can only be used in save. Means it will save in both mysql and yaml.
+  Save: YAML
+  #How often the database will save (in minutes)
+  SaveInterval: 10
+
 Mysql:
   Host:
   Port:

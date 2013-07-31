@@ -8,10 +8,9 @@ import me.messageofdeath.KFCPvP.Utils.Stats.StatType;
 
 import org.bukkit.ChatColor;
 
-public class Timer implements Runnable {
+public class ArenaTimer {
     
-    @Override
-    public void run() {
+    public static void run() {
         for(Arena arena : Arenas.getArenas()) {
             int seconds = arena.getSeconds();
             if(arena.getGameStatus() == ArenaStatus.inGame) {

@@ -65,6 +65,17 @@ public class PlayerStats {
 		}
 	}
 	
+	public static void createPlayerStats(String name, double kills, double deaths, double won, double lost, double playTime) {
+		PlayerStats playerStats = new PlayerStats(name);
+    	playerStats.getStat(StatType.Kills).setAmount(kills);
+    	playerStats.getStat(StatType.Deaths).setAmount(deaths);
+    	playerStats.getStat(StatType.GamesWon).setAmount(won);
+    	playerStats.getStat(StatType.GamesLost).setAmount(lost);
+    	playerStats.getStat(StatType.PlayingTime).setAmount(playTime);
+    	
+    	storePlayerStats(playerStats);
+	}
+	
 	public static PlayerStats getPlayerStats(String name) {
 		return stats.get(name);
 	}

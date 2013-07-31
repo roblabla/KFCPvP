@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class WorldManager {
 
-	private static ArrayList<String> worlds;
+	private static ArrayList<World> worlds;
 	
 	public static void initWorldManager() {
-		worlds = new ArrayList<String>();
+		worlds = new ArrayList<World>();
 	}
 	
-	public static ArrayList<String> getWorlds() {
+	public static ArrayList<World> getWorlds() {
 		return worlds;
 	}
 }
