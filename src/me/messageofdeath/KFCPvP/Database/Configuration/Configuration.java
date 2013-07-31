@@ -17,8 +17,8 @@ public class Configuration {
 	}
 	
 	public static void loadConfiguration() {
-		Database.loadDBType = DatabaseType.parseString(config.getString("DatabaseType.Load", null));
-		Database.saveDBType = DatabaseType.parseString(config.getString("DatabaseType.Save", null));
+		DatabaseType.loadType.setDataType(DatabaseType.parseString(config.getString("DatabaseType.Load", null)));
+		DatabaseType.saveType.setDataType(DatabaseType.parseString(config.getString("DatabaseType.Save", null)));
 
 		ConfigSettings.DatabaseSaveInterval.setSetting(config.getInteger("DatabaseType.SaveInterval", 60*10));
 		ConfigSettings.Worlds.setSetting(config.getStringArray("Worlds", new ArrayList<String>()));
@@ -26,7 +26,7 @@ public class Configuration {
 		checkConfiguration();
 			
 		
-		if(Database.loadDBType == DatabaseType.MySQL || Database.saveDBType == DatabaseType.Both) {
+		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
 			for(MySQLSettings settings : MySQLSettings.values())
 				settings.setSetting(config.getString("MySQL." + settings.getName(), settings.getDefaultSetting()));
 		}
@@ -34,21 +34,21 @@ public class Configuration {
 	
 	private static void checkConfiguration() {
 		//*********** Database Settings Check **************
-		if(Database.loadDBType == null || Database.saveDBType == null || Database.loadDBType == DatabaseType.Both) {
-			if(Database.loadDBType == DatabaseType.Both) {
+		if(DatabaseType.loadType.getDataType() == null || DatabaseType.saveType.getDataType() == null || DatabaseType.loadType.getDataType() == DatabaseType.Both) {
+			if(DatabaseType.loadType.getDataType() == DatabaseType.Both) {
 				Database.logError("Configuration (Database)", "The 'load' database feature cannot be the value of Both! Changing to MySQL!");
 				Database.logError("Configuration (Database)", "The 'load' database feature cannot be the value of Both! Changing to MySQL!");
-				Database.loadDBType = DatabaseType.MySQL;
+				DatabaseType.loadType.setDataType(DatabaseType.MySQL);
 			}
-			if(Database.loadDBType == null) {
+			if(DatabaseType.loadType.getDataType() == null) {
 				Database.logError("Configuration (Database)", "The 'load' Database Type cannot be null! Changing to YAML!");
 				Database.logError("Configuration (Database)", "The 'load' Database Type cannot be null! Changing to YAML!");
-				Database.loadDBType = DatabaseType.YAML;
+				DatabaseType.loadType.setDataType(DatabaseType.YAML);
 			}
-			if(Database.saveDBType == null) {
+			if(DatabaseType.saveType.getDataType() == null) {
 				Database.logError("Configuration (Database)", "The 'save' Database Type cannot be null! Changing to YAML!");
 				Database.logError("Configuration (Database)", "The 'save' Database Type cannot be null! Changing to YAML!");
-				Database.saveDBType = DatabaseType.YAML;
+				DatabaseType.loadType.setDataType(DatabaseType.YAML);
 			}
 		}
 		

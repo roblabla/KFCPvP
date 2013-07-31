@@ -33,10 +33,10 @@ public class MySQL {
     	}catch(SQLException e) {
     		Database.logError("MySQL", "Coult not connect to database! Changing to YAML! - " + e.getMessage());
     		Database.logError("MySQL", "Coult not connect to database! Changing to YAML! - " + e.getMessage());
-    		if(Database.loadDBType == DatabaseType.MySQL)
-    			Database.loadDBType = DatabaseType.YAML;
-    		if(Database.saveDBType == DatabaseType.MySQL)
-    			Database.saveDBType = DatabaseType.YAML;
+    		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL)
+    			DatabaseType.loadType.setDataType(DatabaseType.YAML);
+    		if(DatabaseType.saveType.getDataType() == DatabaseType.MySQL)
+    			DatabaseType.saveType.setDataType(DatabaseType.YAML);
     		success = false;
     	}
     	if(success == true) {

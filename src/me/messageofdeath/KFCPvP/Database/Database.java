@@ -11,40 +11,38 @@ import me.messageofdeath.KFCPvP.Database.Databases.MySQL;
 import me.messageofdeath.KFCPvP.Database.Databases.Yaml;
 
 public class Database {
-	
-    public static DatabaseType loadDBType, saveDBType;
-    
+	    
 	public static void initDatabase() {
-		if(loadDBType == DatabaseType.MySQL || saveDBType == DatabaseType.MySQL || saveDBType == DatabaseType.Both) {
+		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
 			MySQL.initDatabase();
         }
-		if(loadDBType == DatabaseType.YAML || saveDBType == DatabaseType.YAML || saveDBType == DatabaseType.Both) {
+		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
         	Yaml.initDatabase();
         }
 	}
 	
 	public static boolean hasPlayer(String name) {
-		if(loadDBType == DatabaseType.MySQL)
+		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL)
 			return MySQL.hasPlayer(name);
-		else if(loadDBType == DatabaseType.YAML)
+		else if(DatabaseType.loadType.getDataType() == DatabaseType.YAML)
 			return Yaml.hasPlayer(name);
 		return false;
 	}
 	
 	public static void loadPlayer(String name) {
-		if(loadDBType == DatabaseType.YAML) {
+		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML) {
         	Yaml.loadPlayer(name);
 		}
-		if(loadDBType == DatabaseType.MySQL) {
+		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL) {
 			MySQL.loadPlayer(name);
 		}
     }
 	
 	public static void saveDatabase() {
-		if(saveDBType == DatabaseType.YAML || saveDBType == DatabaseType.Both) {
+		if(DatabaseType.saveType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
 			Yaml.saveDatabase();
 		}
-		if(saveDBType == DatabaseType.MySQL || saveDBType == DatabaseType.Both) {
+		if(DatabaseType.saveType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
 			MySQL.saveDatabase();
 		}
 	}
