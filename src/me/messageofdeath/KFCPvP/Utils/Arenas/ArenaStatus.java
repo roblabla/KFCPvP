@@ -5,5 +5,8 @@ public enum ArenaStatus {
 	inLobby(),
 	
 	
-	inGame();
+	inGame(),
+	
+	
+	pendingEnd();
 }

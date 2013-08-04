@@ -1,5 +1,6 @@
 name: KFCPvP
 author: messageofdeath
 version: 1.0
-depend: [messageofdeathLib]
+depend: [messageofdeathLib, MaterialAPI]
+softdepend: [Votifier]
 main: me.messageofdeath.KFCPvP.KFCPvP

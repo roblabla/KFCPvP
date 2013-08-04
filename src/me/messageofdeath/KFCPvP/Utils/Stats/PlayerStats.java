@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.messageofdeath.KFCPvP.Database.Database;
+import me.messageofdeath.KFCPvP.Database.Configuration.ConfigSettings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -58,25 +59,33 @@ public class PlayerStats {
 	}
 	
 	public static void createPlayerStats(String name) {
-		if(Database.hasPlayer(name)) {
-			Database.loadPlayer(name);
-		}else{
-			storePlayerStats(new PlayerStats(name));
-		}
+		if(!containsPlayerStats(name))
+			if(Database.hasPlayer(name)) {
+				Database.loadPlayer(name);
+			}else{
+				createPlayerStats(name, 0, 0, 0, 0, (Integer)ConfigSettings.DefaultPointLimit.getSetting(), 0, "", 0);
+			}
 	}
 	
-	public static void createPlayerStats(String name, double kills, double deaths, double won, double lost, double playTime) {
+	public static void createPlayerStats(String name, double kills, double deaths, double won, double lost, double pointLimit, double extraPoints, String timeOfVote, double playTime) {
+		if(stats == null)
+			stats = new HashMap<String, PlayerStats>();
 		PlayerStats playerStats = new PlayerStats(name);
-    	playerStats.getStat(StatType.Kills).setAmount(kills);
-    	playerStats.getStat(StatType.Deaths).setAmount(deaths);
-    	playerStats.getStat(StatType.GamesWon).setAmount(won);
-    	playerStats.getStat(StatType.GamesLost).setAmount(lost);
-    	playerStats.getStat(StatType.PlayingTime).setAmount(playTime);
+    	playerStats.getStat(StatType.Kills).setStat(kills);
+    	playerStats.getStat(StatType.Deaths).setStat(deaths);
+    	playerStats.getStat(StatType.GamesWon).setStat(won);
+    	playerStats.getStat(StatType.GamesLost).setStat(lost);
+    	playerStats.getStat(StatType.PointLimit).setStat(pointLimit);
+    	playerStats.getStat(StatType.ExtraPoints).setStat(extraPoints);
+    	playerStats.getStat(StatType.TimeofVote).setStat(timeOfVote);
+    	playerStats.getStat(StatType.PlayingTime).setStat(playTime);
     	
     	storePlayerStats(playerStats);
 	}
 	
 	public static PlayerStats getPlayerStats(String name) {
+		if(stats == null)
+			stats = new HashMap<String, PlayerStats>();
 		return stats.get(name);
 	}
 	

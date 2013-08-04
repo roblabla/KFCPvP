@@ -6,7 +6,13 @@ import org.bukkit.entity.Player;
 
 public enum Permissions {
     
-    createSign("kfcpvp.create.sign");
+	//***************** Signs ********************
+    createSign("kfcpvp.create.sign"),
+    
+    
+    
+    //**************** Utils *********************
+    noPermission("noPerm");
     
     private String perm;
     Permissions(String perm) {

@@ -2,23 +2,30 @@ package me.messageofdeath.KFCPvP.Utils.Stats;
 
 public class Stats {
 
-	private double amount = 0;
+	private Object obj;
+	private double tempobj;
 	
 	public Stats() {}
 		
-	public double getAmount() {
-		return this.amount;
+	public Object getStat() {
+		return this.obj;
 	}
 	
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setStat(Object obj) {
+		this.obj = obj;
 	}
 	
 	public void addAmount(double amount) {
-		this.amount += amount;
+		this.obj = (Double)this.obj + amount;
+		this.tempobj += amount;
 	}
 	
 	public void subAmount(double amount) {
-		this.amount -= amount;
+		this.obj = (Double)this.obj - amount;
+		this.tempobj -= amount;
+	}
+	
+	public double getAmountChanged() {
+		return this.tempobj;
 	}
 }

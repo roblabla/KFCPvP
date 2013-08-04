@@ -16,12 +16,19 @@ public class Configuration {
         config.onStartUp();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void loadConfiguration() {
 		DatabaseType.loadType.setDataType(DatabaseType.parseString(config.getString("DatabaseType.Load", null)));
 		DatabaseType.saveType.setDataType(DatabaseType.parseString(config.getString("DatabaseType.Save", null)));
-
-		ConfigSettings.DatabaseSaveInterval.setSetting(config.getInteger("DatabaseType.SaveInterval", 60*10));
-		ConfigSettings.Worlds.setSetting(config.getStringArray("Worlds", new ArrayList<String>()));
+		
+		ConfigSettings.DefaultPointLimit.setSetting(config.getInteger("defaultPointLimit", 
+				(Integer)ConfigSettings.DefaultPointLimit.getDefaultSetting()));
+		ConfigSettings.DatabaseSaveInterval.setSetting(config.getInteger("DatabaseType.SaveInterval", 
+				(Integer)ConfigSettings.DatabaseSaveInterval.getDefaultSetting()));
+		ConfigSettings.VotePointAddition.setSetting(config.getInteger("VotesAdditionToPoints", 
+				(Integer)ConfigSettings.VotePointAddition.getDefaultSetting()));
+		ConfigSettings.Worlds.setSetting(config.getStringArray("Worlds", 
+				(ArrayList<String>)ConfigSettings.Worlds.getDefaultSetting()));
 		
 		checkConfiguration();
 			
@@ -36,37 +43,37 @@ public class Configuration {
 		//*********** Database Settings Check **************
 		if(DatabaseType.loadType.getDataType() == null || DatabaseType.saveType.getDataType() == null || DatabaseType.loadType.getDataType() == DatabaseType.Both) {
 			if(DatabaseType.loadType.getDataType() == DatabaseType.Both) {
-				Database.logError("Configuration (Database)", "The 'load' database feature cannot be the value of Both! Changing to MySQL!");
-				Database.logError("Configuration (Database)", "The 'load' database feature cannot be the value of Both! Changing to MySQL!");
+				Database.logError("Configuration", "The 'load' database feature cannot be the value of Both! Changing to MySQL!");
 				DatabaseType.loadType.setDataType(DatabaseType.MySQL);
 			}
 			if(DatabaseType.loadType.getDataType() == null) {
-				Database.logError("Configuration (Database)", "The 'load' Database Type cannot be null! Changing to YAML!");
-				Database.logError("Configuration (Database)", "The 'load' Database Type cannot be null! Changing to YAML!");
+				Database.logError("Configuration", "The 'load' Database Type must be set! Changing to YAML!");
 				DatabaseType.loadType.setDataType(DatabaseType.YAML);
 			}
 			if(DatabaseType.saveType.getDataType() == null) {
-				Database.logError("Configuration (Database)", "The 'save' Database Type cannot be null! Changing to YAML!");
-				Database.logError("Configuration (Database)", "The 'save' Database Type cannot be null! Changing to YAML!");
+				Database.logError("Configuration", "The 'save' Database Type must be set! Changing to YAML!");
 				DatabaseType.loadType.setDataType(DatabaseType.YAML);
 			}
 		}
 		
-		if(!(ConfigSettings.DatabaseSaveInterval.getSetting() instanceof Integer)) {
-			int seconds = 60*10;
-			Database.logError("Configuration (Database)", "The Database 'Save Interval' has to be a Integer! Changing to (Seconds)" + seconds 
-					+ " or (Minutes)" + seconds/60);
-			Database.logError("Configuration (Database)", "The Database 'Save Interval' has to be a Integer! Changing to (Seconds)" + seconds 
-					+ " or (Minutes)" + seconds/60);
-			ConfigSettings.DatabaseSaveInterval.setSetting(seconds);
+		checkInteger(ConfigSettings.DefaultPointLimit);
+		
+		checkInteger(ConfigSettings.DatabaseSaveInterval);
+				
+		checkArrays(ConfigSettings.Worlds);
+	}
+	
+	private static void checkArrays(ConfigSettings setting) {
+		if(!(setting.getSetting() instanceof ArrayList<?>)) {
+			Database.logError("Configurtion", "The '"+setting.getName()+"' has to be a List! Changing to default value!");
+			setting.setDefaultSetting();
 		}
-		
-		//*************** Worlds Settings Check ***************
-		
-		if(!(ConfigSettings.Worlds.getSetting() instanceof ArrayList<?>)) {
-			Database.logError("Configuration (Worlds)", "The save Database Type cannot be null! Changing to YAML!");
-			Database.logError("Configuration (Worlds)", "The save Database Type cannot be null! Changing to YAML!");
-			ConfigSettings.Worlds.setSetting(new ArrayList<String>());
+	}
+	
+	private static void checkInteger(ConfigSettings setting) {
+		if(!(setting.getSetting() instanceof Integer)) {
+			Database.logError("Configurtion", "The '"+setting.getName()+"' has to be a Integer! Changing to default value!");
+			setting.setDefaultSetting();
 		}
 	}
 }

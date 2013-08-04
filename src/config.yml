@@ -14,3 +14,10 @@ Mysql:
   Database:
   Username:
   Password:
+  
+Worlds:
+  Ultimate:
+    Cuboid:
+      VectorA:
+      VectorB:
+    

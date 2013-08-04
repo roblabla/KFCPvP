@@ -17,14 +17,14 @@ public class Database {
 			MySQL.initDatabase();
         }
 		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
-        	Yaml.initDatabase();
+			Yaml.initDatabase();
         }
 	}
 	
 	public static boolean hasPlayer(String name) {
 		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL)
 			return MySQL.hasPlayer(name);
-		else if(DatabaseType.loadType.getDataType() == DatabaseType.YAML)
+		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML)
 			return Yaml.hasPlayer(name);
 		return false;
 	}
