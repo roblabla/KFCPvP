@@ -125,7 +125,7 @@ public class Arena {
     		Bukkit.getPlayer(name).teleport(this.lobby);
     }
     
-    //****************** Boundaries *******************
+    //****************** World *******************
    
     public World getWorld() {
     	return this.world;
