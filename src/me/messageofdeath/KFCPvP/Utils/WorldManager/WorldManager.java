@@ -11,11 +11,13 @@ public class WorldManager  {
 	private static ArrayList<World> worlds;
 	
 	public static void loadWorld(World world) {
-		KFCPvP.instance.getServer().createWorld(new WorldCreator(world.getWorldName()));
+		if(!world.inUse())
+			KFCPvP.instance.getServer().createWorld(new WorldCreator(world.getWorldName()));
 	}
 	
 	public static void unloadWorld(World world) {
-		KFCPvP.instance.getServer().unloadWorld(world.getWorldName(), false);
+		if(!world.inUse())
+			KFCPvP.instance.getServer().unloadWorld(world.getWorldName(), false);
 	}
 	
 	public static void initWorldManager() {

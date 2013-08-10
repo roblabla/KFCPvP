@@ -42,6 +42,10 @@ public class PlayerStats {
 		return statistics.get(statType.getName());
 	}
 	
+	//**************** Comparables ***************
+	
+	//TODO Finish
+	
 	//****************** Static *******************
 	
 	private static HashMap<String, PlayerStats> stats;

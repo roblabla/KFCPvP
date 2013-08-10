@@ -15,7 +15,6 @@ import me.messageofdeath.KFCPvP.Utils.WorldManager.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
@@ -28,13 +27,11 @@ public class Arena {
     private final String name, prefix;
     private int maxPlayers, minPlayers, seconds;
     private ArenaStatus arenaStatus;
-    private Location lobby;
     private World world;
     private ArrayList<String> players, winner;
     
-    public Arena(String name, Location lobby, int minPlayers, int maxPlayers) {
+    public Arena(String name, int minPlayers, int maxPlayers) {
         this.name = name;
-        this.lobby = lobby;
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.seconds = 60*2;//Start Lobby Time
@@ -113,18 +110,6 @@ public class Arena {
     	return players;
     }
     
-    public void sendToLobby() {
-    	for(String player : getPlayers()) {
-    		if(isOnline(player))
-    			Bukkit.getPlayer(player).teleport(this.lobby);
-    	}
-    }
-    
-    public void sendToLobby(String name) {
-    	if(isOnline(name))
-    		Bukkit.getPlayer(name).teleport(this.lobby);
-    }
-    
     //****************** World *******************
    
     public World getWorld() {
@@ -149,15 +134,22 @@ public class Arena {
         this.seconds = seconds;
     }
     
-    public void changeMap(String map) {//TODO Implement world manager
+  //*********************** Map Change ***********************
+    
+    public void changeMap(String map) {
     	WorldManager.unloadWorld(getWorld());
+    	getWorld().removeUse(this);
+    	
     	WorldManager.loadWorld(WorldManager.getWorld(map));
     	this.world = WorldManager.getWorld(map);
+    	getWorld().addUse(this);
     }
     
-    public ArrayList<String> getWinner() {
+  //*********************** Winner ***********************
+    
+    public ArrayList<String> getWinner() {//TODO Fix in fashion of Points
     	ArrayList<PlayerStats> stat = getPlayersStats();
-    	ArrayList<String> newStats = new ArrayList<String>();
+    	ArrayList<String> tempStats = new ArrayList<String>(), newStats = new ArrayList<String>();
     	Collections.sort(stat, new Comparator<PlayerStats>() {
     		
 			@Override
@@ -169,13 +161,15 @@ public class Arena {
     	
     	for(int i = 0; i < stat.size(); i++) {
     		if(lastInt == stat.get(i).getStat(StatType.Kills).getAmountChanged())
-    			newStats.add(stat.get(i).getName());
+    			tempStats.add(stat.get(i).getName());
     		else
     			break;
     	}
     		
 		return newStats;
     }
+    
+  //*********************** Start Game ***********************
     
     public void queueStartGame() {
     	 if(this.getPlayers().size() >= this.getMinPlayers()) {
@@ -191,7 +185,7 @@ public class Arena {
     
     public void startGame() {//TODO Do start game
     	
-    	this.changeMap(/*TODO Implement world manager and voting for worlds*/"");
+    	this.changeMap(/*TODO Implement world manager and voting for worlds*/""/*VoteManager.getNextMap(this)*/);
     	
     	for(String name : this.getPlayers()) {
     		Player player = Bukkit.getPlayer(name);
@@ -199,6 +193,8 @@ public class Arena {
     		getWorld().randomSpawn(name);
     	}
     }
+    
+    //*********************** Stop Game ***********************
     
     public void queueStopGame(ArrayList<String> winner, boolean force, boolean notEnoughPlayers) {
     	this.winner = winner;
@@ -231,6 +227,6 @@ public class Arena {
     	this.setGameStatus(ArenaStatus.inLobby);
         this.setSeconds(60*2);
         Database.saveDatabase();
-        this.sendToLobby();
+        this.world.sendToLobby(this);
     }
 }

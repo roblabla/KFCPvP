@@ -1,6 +1,6 @@
 package me.messageofdeath.KFCPvP.Utils.PageLists;
 
-import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class Option {
 	
@@ -11,8 +11,8 @@ public class Option {
 		this.perm = perm;
 	}
 	
-	public boolean hasPermission(String name) {
-		return Bukkit.getPlayer(name).hasPermission(this.perm) || this.perm.equalsIgnoreCase("noPerm") 
+	public boolean hasPermission(CommandSender sender) {
+		return sender.hasPermission(this.perm) || this.perm.equalsIgnoreCase("noPerm") 
 				|| this.perm.equalsIgnoreCase("") || this.perm.equalsIgnoreCase("noPermission");
 	}
 	

@@ -34,9 +34,11 @@ public class playerListener implements Listener {
 			}
 	}
 	
+	
+	//Points work by amountOfDamageDone*5 to get percentage
 	@EventHandler
 	public void onGameDeath(GameDeathEvent event) {
-		event.getArena().sendToLobby(event.getVictim().getName());
+		event.getArena().getWorld().sendToLobby(event.getVictim().getName());
 		PlayerStats.getPlayerStats(event.getVictim().getName()).getStat(StatType.Deaths).addAmount(1);
 		if(event.getAttacker() != null) {
 			if(event.getAttacker() instanceof Player) {

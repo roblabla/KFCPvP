@@ -8,7 +8,7 @@ import me.messageofdeath.Commands.NewCommandSystem.Type;
 public class infchestCommand extends MessageCommand {
 
 	@Override
-	@Command(name = "infchest", permission = "noPerm", description = "")
+	@Command(name = "infchest")
 	public void issue(IssuedCommand arg0, Type arg1) {
 		
 	}

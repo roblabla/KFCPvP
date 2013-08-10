@@ -2,6 +2,9 @@ package me.messageofdeath.KFCPvP.Utils.PageLists;
 
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 public class PageList {
 	
 	private ArrayList<Option> options = new ArrayList<Option>();
@@ -12,35 +15,48 @@ public class PageList {
 		this.amountPerPage = amountPerPage;
 	}
 	
-	public ArrayList<String> getOptions(String name, int page) {
-		checkPage(name, page);
-		
+	public ArrayList<String> getOptions(CommandSender name, int page) {		
 		ArrayList<String> texts = new ArrayList<String>();
 		int id = page * this.amountPerPage;
-		for(int i = id; i < id + this.amountPerPage; i++)
-			texts.add(this.options.get(i).getText());
+		for(int i = id; i < id + this.amountPerPage; i++) {
+			if(i >= this.options.size())
+    			break;
+			if(this.options.get(i).hasPermission(name))
+				texts.add(this.options.get(i).getText());
+		}
+		if(texts.isEmpty())
+			texts.add(ChatColor.DARK_GRAY + "   - " + ChatColor.GRAY + "There are no available commands.");
 		return texts;
 	}
 	
-	private int checkPage(String name, int page) {
+	public int checkPage(CommandSender name, int page) {
+		if(page >= Integer.MAX_VALUE)
+			page = Integer.MAX_VALUE - 1;
+		if(page <= Integer.MIN_VALUE)
+			page = Integer.MIN_VALUE + 1;
+		
 		page -= 1;
-		if(page == -1)
-			page = 1;
-		if(page > getTotalPages(name))
-			page = getTotalPages(name);
+		if(page < 0) {
+			page = 0;
+		}
+		if(page > getTotalPages(name) - 1) {
+			page = getTotalPages(name) - 1;
+		}
 		return page;
 	}
 	
-	public int getTotalPages(String name) {
+	public int getTotalPages(CommandSender name) {
 		if(!this.options.isEmpty()) {
 			int text = 0;
 			for(Option option : this.options)
 				if(option.hasPermission(name))
 					text++;
-			if(text % this.amountPerPage > 0)
+			if(text % this.amountPerPage == 0)
+				return (text / this.amountPerPage);
+			else if(text % this.amountPerPage > 0)
 				return (text / this.amountPerPage) + 1;
 			else
-				return (text / this.amountPerPage);
+				return 0;
 		}else
 			return 0;
 	}

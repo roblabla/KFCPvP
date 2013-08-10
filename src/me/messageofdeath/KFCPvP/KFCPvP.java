@@ -20,20 +20,29 @@ public class KFCPvP extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
+		//Configuration
 		Database.initConfiguration();
 		Database.loadConfiguration();
+		//Database
 		Database.initDatabase();
+		//Item Database
+		Database.initItemDatabase();
+		Database.loadItemDatabase();
+		
+		//Events
 		getServer().getPluginManager().registerEvents(new signListener(), this);
 		getServer().getPluginManager().registerEvents(new playerListener(), this);
 		if(getServer().getPluginManager().isPluginEnabled("Votifier"))
 			getServer().getPluginManager().registerEvents(new voteListener(), this);
+		
 		//Start Global Arena Base Timer
         getServer().getScheduler().runTaskTimer(this, new PluginTimer(), 0L, 20L);
         
+        //Commands
         CommandManager.register(this, new kfcpvpCommand());
         CommandManager.register(this, new voteCommand());
         CommandManager.register(this, new infchestCommand());
-        CommandManager.register(this, new statsCommand());
+        CommandManager.register(this, new statsCommand());        
 	}
 	
 	@Override

@@ -55,6 +55,14 @@ public class Database {
 		Configuration.loadConfiguration();
 	}
 	
+	public static void initItemDatabase() {
+		ItemDatabase.initItemDatabase();
+	}
+	
+	public static void loadItemDatabase() {
+		ItemDatabase.loadItemDatabase();
+	}
+	
 	public static void logError(String prefix, String msg) {
 		Logger log = Bukkit.getLogger();
 		for(int i = 20; i > -1; i--)

@@ -8,7 +8,7 @@ import me.messageofdeath.Commands.NewCommandSystem.Type;
 public class voteCommand extends MessageCommand {
 
 	@Override
-	@Command(name = "vote", permission = "noPerm", description = "")
+	@Command(name = "vote")
 	public void issue(IssuedCommand arg0, Type arg1) {
 		
 	}

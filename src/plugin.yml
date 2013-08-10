@@ -4,3 +4,8 @@ version: 1.0
 depend: [messageofdeathLib, MaterialAPI]
 softdepend: [Votifier]
 main: me.messageofdeath.KFCPvP.KFCPvP
+commands:
+  infchest:
+  kfcpvp:
+  stats:
+  vote:
