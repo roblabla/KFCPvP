@@ -3,7 +3,7 @@ package me.messageofdeath.KFCPvP.Utils.Stats;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.messageofdeath.KFCPvP.Database.Database;
+import me.messageofdeath.KFCPvP.Database.StatDatabase;
 import me.messageofdeath.KFCPvP.Database.Configuration.ConfigSettings;
 
 import org.bukkit.Bukkit;
@@ -64,8 +64,8 @@ public class PlayerStats {
 	
 	public static void createPlayerStats(String name) {
 		if(!containsPlayerStats(name))
-			if(Database.hasPlayer(name)) {
-				Database.loadPlayer(name);
+			if(StatDatabase.hasPlayer(name)) {
+				StatDatabase.loadPlayer(name);
 			}else{
 				createPlayerStats(name, 0, 0, 0, 0, (Integer)ConfigSettings.DefaultPointLimit.getSetting(), 0, "", 0);
 			}

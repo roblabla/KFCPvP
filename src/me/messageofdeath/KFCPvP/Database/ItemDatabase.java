@@ -15,19 +15,24 @@ public class ItemDatabase {
 	
 	private static YamlDatabase items;
 	
-	protected static void initItemDatabase() {
+	protected static void initDatabase() {
 		items = new YamlDatabase(KFCPvP.instance, "items");
 		items.onStartUp();
 		itemNames = new HashMap<String, ItemStack>();
 	}
 	
-	protected static void loadItemDatabase() {
+	protected static void loadDatabase() {
+		if(itemNames == null)
+			itemNames = new HashMap<String, ItemStack>();
 		for(String key : items.getSection("")) {
-			String[] value = items.getString(key, "0,0").split(",");
-			if(!itemNames.containsKey(key))
-				itemNames.put(key, new ItemStack(Material.getMaterial(value[0]), 1, Short.parseShort(value[1])));
+			String[] value = items.getString(key, null).split(",");
+			if(value != null)
+				if(!itemNames.containsKey(key))
+					itemNames.put(key, new ItemStack(Material.getMaterial(Integer.parseInt(value[0])), 1, Short.parseShort(value[1])));
 		}
 	}
+	
+	//**************** Methods **************
 	
 	public static ItemStack getMaterial(String input) {
 		if(input != null) {

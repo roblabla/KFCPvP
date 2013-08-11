@@ -23,11 +23,17 @@ public class KFCPvP extends JavaPlugin {
 		//Configuration
 		Database.initConfiguration();
 		Database.loadConfiguration();
-		//Database
-		Database.initDatabase();
+		//Stats Database (Does not load entire database to prevent overload)
+		Database.initStatDatabase();
 		//Item Database
 		Database.initItemDatabase();
 		Database.loadItemDatabase();
+		//Arena Database
+		Database.initArenaDatabase();
+		Database.loadArenaDatabase();
+		//World Database
+		Database.initWorldDatabase();
+		Database.loadWorldDatabase();
 		
 		//Events
 		getServer().getPluginManager().registerEvents(new signListener(), this);
@@ -47,6 +53,6 @@ public class KFCPvP extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		Database.saveDatabase();
+		Database.saveStatDatabase();
 	}
 }

@@ -13,8 +13,8 @@ import org.bukkit.command.ConsoleCommandSender;
 public class ArenaTimer {
 	
 	public static ConsoleCommandSender sender = null;
-    
-    public static void run() {
+//Its for one server and no plugin will touch it. Thats like violating a commandment 
+	public static void run() {
     	if(sender == null)
     		sender = Bukkit.getConsoleSender();
         for(Arena arena : Arenas.getArenas()) {

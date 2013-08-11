@@ -9,7 +9,7 @@ public class DatabaseTimer {
 	
     public static void run() {
     	if(seconds == 60*Integer.parseInt(String.valueOf(ConfigSettings.DatabaseSaveInterval.getSetting()))) {
-    		Database.saveDatabase();
+    		Database.saveStatDatabase();
     		seconds = -1;
     	}
     	seconds++;

@@ -6,46 +6,10 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 
 import me.messageofdeath.KFCPvP.Database.Configuration.Configuration;
-import me.messageofdeath.KFCPvP.Database.Databases.DatabaseType;
-import me.messageofdeath.KFCPvP.Database.Databases.MySQL;
-import me.messageofdeath.KFCPvP.Database.Databases.Yaml;
 
 public class Database {
-	    
-	public static void initDatabase() {
-		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
-			MySQL.initDatabase();
-        }
-		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
-			Yaml.initDatabase();
-        }
-	}
 	
-	public static boolean hasPlayer(String name) {
-		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL)
-			return MySQL.hasPlayer(name);
-		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML)
-			return Yaml.hasPlayer(name);
-		return false;
-	}
-	
-	public static void loadPlayer(String name) {
-		if(DatabaseType.loadType.getDataType() == DatabaseType.YAML) {
-        	Yaml.loadPlayer(name);
-		}
-		if(DatabaseType.loadType.getDataType() == DatabaseType.MySQL) {
-			MySQL.loadPlayer(name);
-		}
-    }
-	
-	public static void saveDatabase() {
-		if(DatabaseType.saveType.getDataType() == DatabaseType.YAML || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
-			Yaml.saveDatabase();
-		}
-		if(DatabaseType.saveType.getDataType() == DatabaseType.MySQL || DatabaseType.saveType.getDataType() == DatabaseType.Both) {
-			MySQL.saveDatabase();
-		}
-	}
+	//******************* Configuration *********************
 	
 	public static void initConfiguration() {
 		Configuration.initConfiguration();
@@ -55,13 +19,47 @@ public class Database {
 		Configuration.loadConfiguration();
 	}
 	
+	//******************* Players *********************
+	
+	public static void initStatDatabase() {
+		StatDatabase.initDatabase();
+	}
+	
+	public static void saveStatDatabase() {
+		StatDatabase.saveDatabase();
+	}
+	
+	//******************* Items *********************
+	
 	public static void initItemDatabase() {
-		ItemDatabase.initItemDatabase();
+		ItemDatabase.initDatabase();
 	}
 	
 	public static void loadItemDatabase() {
-		ItemDatabase.loadItemDatabase();
+		ItemDatabase.loadDatabase();
 	}
+	
+	//******************* Arena *********************
+	
+	public static void initArenaDatabase() {
+		ArenaDatabase.initDatabase();
+	}
+	
+	public static void loadArenaDatabase() {
+		ArenaDatabase.loadDatabase();
+	}
+	
+	//******************* World *********************
+	
+	public static void initWorldDatabase() {
+		WorldDatabase.initDatabase();
+	}
+	
+	public static void loadWorldDatabase() {
+		WorldDatabase.loadDatabase();
+	}
+	
+	//******************* Logging *********************
 	
 	public static void logError(String prefix, String msg) {
 		Logger log = Bukkit.getLogger();

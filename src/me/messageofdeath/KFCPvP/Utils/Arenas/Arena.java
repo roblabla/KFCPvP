@@ -137,10 +137,12 @@ public class Arena {
   //*********************** Map Change ***********************
     
     public void changeMap(String map) {
-    	WorldManager.unloadWorld(getWorld());
-    	getWorld().removeUse(this);
-    	
-    	WorldManager.loadWorld(WorldManager.getWorld(map));
+    	if(WorldManager.isLoaded(getWorld())) {
+    		WorldManager.unloadWorld(getWorld());
+    		getWorld().removeUse(this);
+    	}
+    	if(!WorldManager.isLoaded(getWorld()))
+    		WorldManager.loadWorld(WorldManager.getWorld(map));
     	this.world = WorldManager.getWorld(map);
     	getWorld().addUse(this);
     }
@@ -226,7 +228,7 @@ public class Arena {
     	
     	this.setGameStatus(ArenaStatus.inLobby);
         this.setSeconds(60*2);
-        Database.saveDatabase();
+        Database.saveStatDatabase();
         this.world.sendToLobby(this);
     }
 }

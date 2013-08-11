@@ -8,20 +8,23 @@ import org.bukkit.Bukkit;
 import me.messageofdeath.Blocks.Cuboid;
 import me.messageofdeath.Blocks.Vector;
 import me.messageofdeath.KFCPvP.Utils.Arenas.Arena;
+import me.messageofdeath.KFCPvP.Utils.InfiniteChests.InfiniteChest;
 
 public class World {
 
 	private String worldName;
 	private Vector lobby;
 	private ArrayList<Vector> spawns;
+	private ArrayList<InfiniteChest> chests;
 	private ArrayList<Arena> using;
 	private Cuboid cuboid;
 	
-	public World(String worldName, Vector lobby, ArrayList<Vector> spawns, Cuboid cuboid) {
+	public World(String worldName, Vector lobby, ArrayList<Vector> spawns, ArrayList<InfiniteChest> chests, Cuboid cuboid) {
 		this.worldName = worldName;
 		this.lobby = lobby;
 		this.spawns = spawns;
 		this.cuboid = cuboid;
+		this.chests = chests;
 		this.using = new ArrayList<Arena>();
 	}
 	
@@ -31,6 +34,10 @@ public class World {
 	
 	public Vector getLobby() {
 		return this.lobby;
+	}
+	
+	public ArrayList<InfiniteChest> getChests() {
+		return chests;
 	}
 	
 	public void randomSpawn(String name) {

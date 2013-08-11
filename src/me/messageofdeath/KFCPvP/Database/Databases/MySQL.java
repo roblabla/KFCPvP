@@ -1,11 +1,13 @@
 package me.messageofdeath.KFCPvP.Database.Databases;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import me.messageofdeath.Database.MySQLDatabase;
 import me.messageofdeath.KFCPvP.KFCPvP;
 import me.messageofdeath.KFCPvP.Database.Database;
+import me.messageofdeath.KFCPvP.Database.StatDatabase;
 import me.messageofdeath.KFCPvP.Database.Configuration.MySQLSettings;
 import me.messageofdeath.KFCPvP.Utils.Stats.PlayerStats;
 import me.messageofdeath.KFCPvP.Utils.Stats.StatType;
@@ -51,13 +53,15 @@ public class MySQL {
         		Bukkit.getLogger().log(Level.INFO, "Created the table '{0}'!", table);
         	}
     	}
+    	
+    	Bukkit.getLogger().info("" + mdatabase.getStringArray(table, "Player", new ArrayList<String>()));//This is not in Aurora
 	}
 	
 	//***************** OnCloseDown Methods *****************
 	
 	public static void saveDatabase() {
 		for(PlayerStats player : PlayerStats.getAll()) {
-			if(Database.hasPlayer(player.getName())) {
+			if(StatDatabase.hasPlayer(player.getName())) {
 				for(StatType stats : StatType.values())
 					mdatabase.update(table, stats.getName() + " = '" + player.getStat(stats).getStat() + "'", "Player = '"+player.getName()+"'");
 			}else{
