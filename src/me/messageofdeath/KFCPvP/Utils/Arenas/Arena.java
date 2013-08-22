@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import me.messageofdeath.KFCPvP.KFCPvP;
-import me.messageofdeath.KFCPvP.Database.Database;
 import me.messageofdeath.KFCPvP.Timer.ArenaTimer;
 import me.messageofdeath.KFCPvP.Utils.Stats.PlayerStats;
 import me.messageofdeath.KFCPvP.Utils.Stats.StatType;
@@ -25,6 +24,8 @@ import org.bukkit.entity.Player;
 public class Arena {
     
     private final String name, prefix;
+    private String win;
+    private boolean forceEnd, notEnoughPlayers;
     private int maxPlayers, minPlayers, seconds;
     private ArenaStatus arenaStatus;
     private World world;
@@ -39,6 +40,8 @@ public class Arena {
         this.arenaStatus = ArenaStatus.inLobby;
         this.players = new ArrayList<String>();
         this.world = null;
+        this.forceEnd = false;
+        this.notEnoughPlayers = false;
     }
     
     public String getName() {
@@ -64,10 +67,10 @@ public class Arena {
     }
     
     public void addPlayer(String name) {
-        if(!hasPlayer(name)) {
+        if(!this.hasPlayer(name)) {
             this.players.add(name);
-            if(!PlayerStats.containsPlayerStats(name))
-            	PlayerStats.createPlayerStats(name);
+            if(!KFCPvP.getInstance().getStatManager().containsPlayerStats(name))
+            	KFCPvP.getInstance().getStatManager().createPlayerStats(name);
         }
     }
     
@@ -81,15 +84,15 @@ public class Arena {
     
     public ArrayList<PlayerStats> getPlayersStats() {
     	ArrayList<PlayerStats> stat = new ArrayList<PlayerStats>();
-    	for(String name : getPlayers())
-    		stat.add(PlayerStats.getPlayerStats(name));
+    	for(String name : this.getPlayers())
+    		stat.add(KFCPvP.getInstance().getStatManager().getPlayerStats(name));
         return stat;
     }
     
     public void sendMessage(String msg) {
         for(String player : this.getPlayers()) {
         	if(this.isOnline(player))
-        		KFCPvP.instance.getServer().getPlayer(player).sendMessage(prefix + " " + ChatColor.translateAlternateColorCodes('&',msg));
+        		KFCPvP.getInstance().getServer().getPlayer(player).sendMessage(prefix + " " + ChatColor.translateAlternateColorCodes('&',msg));
         }
         ArenaTimer.sender.sendMessage("[Arena Debug] ("+this.getName()+") " + prefix + " " + ChatColor.translateAlternateColorCodes('&', msg));
     }
@@ -116,6 +119,10 @@ public class Arena {
     	return this.world;
     }
     
+    public void setWorld(World world) {
+    	this.world = world;
+    }
+    
     //****************** Game ***********************
     
     public ArenaStatus getGameStatus() {
@@ -137,14 +144,20 @@ public class Arena {
   //*********************** Map Change ***********************
     
     public void changeMap(String map) {
-    	if(WorldManager.isLoaded(getWorld())) {
-    		WorldManager.unloadWorld(getWorld());
-    		getWorld().removeUse(this);
+    	WorldManager worldManager = KFCPvP.getInstance().getWorldManager();
+    	if(worldManager.isLoaded(getWorld())) {
+    		this.getWorld().removeUse(this);
+    		worldManager.unloadWorld(getWorld());
     	}
-    	if(!WorldManager.isLoaded(getWorld()))
-    		WorldManager.loadWorld(WorldManager.getWorld(map));
-    	this.world = WorldManager.getWorld(map);
-    	getWorld().addUse(this);
+    	this.setWorld(worldManager.getWorld(map));
+    	if(this.getWorld() != null) {
+	    	if(!worldManager.isLoaded(getWorld())) {
+	    		worldManager.loadWorld(worldManager.getWorld(map));
+	    		this.getWorld().addUse(this);
+	    	}
+    	}else{
+    		//Report error that world does not exist
+    	}
     }
     
   //*********************** Winner ***********************
@@ -156,13 +169,13 @@ public class Arena {
     		
 			@Override
 			public int compare(PlayerStats stats1, PlayerStats stats2) {
-				return (int) (stats1.getStat(StatType.Kills).getAmountChanged() - stats2.getStat(StatType.Kills).getAmountChanged());
+				return (int) (stats1.getStat(StatType.Kills).getChanged() - stats2.getStat(StatType.Kills).getChanged());
 			}    		
     	});
-    	int lastInt = (int) stat.get(0).getStat(StatType.Kills).getAmountChanged();
+    	int lastInt = (int) stat.get(0).getStat(StatType.Kills).getChanged();
     	
     	for(int i = 0; i < stat.size(); i++) {
-    		if(lastInt == stat.get(i).getStat(StatType.Kills).getAmountChanged())
+    		if(lastInt == stat.get(i).getStat(StatType.Kills).getChanged())
     			tempStats.add(stat.get(i).getName());
     		else
     			break;
@@ -192,7 +205,7 @@ public class Arena {
     	for(String name : this.getPlayers()) {
     		Player player = Bukkit.getPlayer(name);
     		player.setGameMode(GameMode.ADVENTURE);
-    		getWorld().randomSpawn(name);
+    		//getWorld().randomSpawn(name);
     	}
     }
     
@@ -201,34 +214,43 @@ public class Arena {
     public void queueStopGame(ArrayList<String> winner, boolean force, boolean notEnoughPlayers) {
     	this.winner = winner;
     	this.setSeconds(5);
+    	this.setGameStatus(ArenaStatus.pendingEnd);
     	if(this.winner != null) {
     		if(!this.winner.isEmpty()) {
-    			String win = winner.get(0) + ",";
-    			if(winner.size() > 1) {
+    			String win = ChatColor.GRAY + "(" + ChatColor.GOLD + winner.get(0) + ChatColor.DARK_GRAY + ",";
+    			if(this.winner.size() > 1) {
+    				
     				for(int i = 1; i < winner.size(); i++)
-    					win += " " + winner.get(i) + ",";
+    					win += " " + ChatColor.GOLD + winner.get(i) + ChatColor.DARK_GRAY + ",";
     				win = win.substring(0, win.length() - 1);
-    				win += " all won the game";
-    			}else
-    				win = winner.get(0) + " has won the game!";
+    				win += ChatColor.GRAY + ")" + ChatColor.GOLD + " all won the game";
+    			}else{
+    				win = win.substring(0, win.length() - 1);
+    				win += ChatColor.GRAY + ")" + ChatColor.GOLD + " has won the game!";
+    			}
+    			this.win = win;
     			for(int i = 6; i > -1; i--)
     				this.sendMessage(win);
     		}
     	}
     	if(notEnoughPlayers)
-    		this.sendMessage("This arena does not contain enough players to continue.");
+    		this.notEnoughPlayers = notEnoughPlayers;
     	if(force)
-    		this.sendMessage("This arena was forced closed!");
+    		this.forceEnd = force;
     }
     
     public void stopGame() {
-    	if(this.winner != null)
+    	if(this.win != null)
     		for(int i = 6; i > -1; i--)
-    			this.sendMessage(winner + " has won the game!");
+    			this.sendMessage(this.win);
     	
+    	if(this.notEnoughPlayers)
+    		this.sendMessage("This arena does not contain enough players to continue.");
+    	if(this.forceEnd)
+    		this.sendMessage("This arena was forced closed!");
     	this.setGameStatus(ArenaStatus.inLobby);
         this.setSeconds(60*2);
-        Database.saveStatDatabase();
-        this.world.sendToLobby(this);
+        KFCPvP.getInstance().getStatDatabase().saveDatabase();
+        //this.world.sendToLobby(this);
     }
 }

@@ -2,7 +2,6 @@ package me.messageofdeath.KFCPvP.Utils.PageLists;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class PageList {
@@ -24,8 +23,6 @@ public class PageList {
 			if(this.options.get(i).hasPermission(name))
 				texts.add(this.options.get(i).getText());
 		}
-		if(texts.isEmpty())
-			texts.add(ChatColor.DARK_GRAY + "   - " + ChatColor.GRAY + "There are no available commands.");
 		return texts;
 	}
 	

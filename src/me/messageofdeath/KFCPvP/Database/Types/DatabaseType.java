@@ -1,4 +1,4 @@
-package me.messageofdeath.KFCPvP.Database.Databases;
+package me.messageofdeath.KFCPvP.Database.Types;
 
 public enum DatabaseType {
 
@@ -16,7 +16,7 @@ public enum DatabaseType {
 	
 	
 	
-	Both(),
+	ALL(),
 	
 	
 	
@@ -52,7 +52,7 @@ public enum DatabaseType {
 		else if(parse.equalsIgnoreCase("yaml") || parse.equalsIgnoreCase("yml"))
 			return DatabaseType.YAML;
 		else if(parse.equalsIgnoreCase("both") || parse.equalsIgnoreCase("all"))
-			return DatabaseType.Both;
+			return DatabaseType.ALL;
 		else
 			return null;
 	}

@@ -18,7 +18,7 @@ public class kfcpvpCommand extends MessageCommand {
 	private PageList help;
 	
 	@Override
-	@Command(name = "kfcpvp", permission = "")
+	@Command(name = "kfcpvp", permission = ""/*TODO Add permission to admin command*/)
 	public void issue(IssuedCommand cmd, Type type) {
 		if(messenger == null)
 			messenger = new Messenger(ChatColor.translateAlternateColorCodes('&', "&0[&eKFC&f-&4P&fv&4P&0] &f"));
@@ -50,6 +50,10 @@ public class kfcpvpCommand extends MessageCommand {
 		page = help.checkPage(cmd.getSender(), page);
 		ArrayList<String> texts = help.getOptions(cmd.getSender(), page);
 		super.msgPrefix(cmd, "Available Commands (Page "+(page + 1)+"/"+(help.getTotalPages(cmd.getSender()))+"):");
+		if(texts.isEmpty()) {
+			texts.add(ChatColor.DARK_GRAY + "   - " + ChatColor.GRAY + "There are no available commands.");
+			return;
+		}
 		for(String text : texts)
 			super.msg(cmd, text);
 	}
@@ -57,7 +61,7 @@ public class kfcpvpCommand extends MessageCommand {
 	private void setupHelp() {
 		ArrayList<Option> options = new ArrayList<Option>();
 		String bull = ChatColor.DARK_GRAY + "   - " + ChatColor.GRAY;
-		
+
 		options.add(new Option(bull + "", "noPerm"));
 		
 		this.help = new PageList(options, 5);

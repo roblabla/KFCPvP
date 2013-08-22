@@ -6,32 +6,32 @@ import java.util.ArrayList;
  *
  * @author messageofDEATH
  */
-public class Arenas {
+public class ArenaManager {
     
-    private static ArrayList<Arena> arenas;
+    protected ArrayList<Arena> arenas;
     
-    public static void register(Arena arena) {
+    public void register(Arena arena) {
         if(arenas == null)
             arenas = new ArrayList<Arena>();
         if(!contains(arena.getName()))
             arenas.add(arena);
     }
     
-    public static ArrayList<Arena> getArenas() {
+    public ArrayList<Arena> getArenas() {
     	if(arenas == null)
             arenas = new ArrayList<Arena>();
         return arenas;
     }
     
-    public static void unregister(String name) {
+    public void unregister(String name) {
         arenas.remove(getArena(name));
     }
     
-    public static boolean contains(String name) {
+    public boolean contains(String name) {
         return getArena(name) != null;
     }
     
-    public static Arena getArena(String name) {
+    public Arena getArena(String name) {
     	if(arenas == null)
             arenas = new ArrayList<Arena>();
         for(Arena arena : arenas)

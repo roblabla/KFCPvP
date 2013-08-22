@@ -27,14 +27,14 @@ public enum StatType {
 	
 	
 	
-	PointLimit(),
+	/*PointLimit(),//Not Stat
 	
 	
 	
 	
 	
 	
-	ExtraPoints(),
+	ExtraPoints(),//Not Stat
 	
 	
 	
@@ -42,7 +42,7 @@ public enum StatType {
 	
 	
 	
-	TimeofVote(),
+	TimeofVote(),//Not Stat*/
 	
 	
 	
@@ -55,13 +55,6 @@ public enum StatType {
 	}
 	
 	public String getType() {
-		if(this.equals(Kills) || this.equals(Deaths) || this.equals(GamesWon) 
-				|| this.equals(GamesLost) || this.equals(PointLimit) 
-				|| this.equals(ExtraPoints) || this.equals(PlayingTime)) {
-			return "INT";
-		}
-		else if(this.equals(TimeofVote))
-			return "VARCHAR(100)";
-		return "";
+		return "INT";
 	}
 }

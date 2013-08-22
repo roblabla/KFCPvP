@@ -8,8 +8,9 @@ import me.messageofdeath.Commands.NewCommandSystem.Type;
 public class infchestCommand extends MessageCommand {
 
 	@Override
-	@Command(name = "infchest")
+	@Command(name = "infchest", permission = ""/*TODO Add permission for admin command*/)
 	public void issue(IssuedCommand arg0, Type arg1) {
-		
+		// /infchest <item> <amount> <point value>
+		// Slap a chest
 	}
 }

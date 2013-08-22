@@ -1,7 +1,7 @@
 package me.messageofdeath.KFCPvP.Utils.InfiniteChests;
 
 import me.messageofdeath.Blocks.Vector;
-import me.messageofdeath.KFCPvP.Database.ItemDatabase;
+import me.messageofdeath.KFCPvP.KFCPvP;
 import me.messageofdeath.KFCPvP.Utils.WorldManager.World;
 
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ public class InfiniteChest {
 			throw new IllegalArgumentException("The location must be a chest!");
 		}
 		
-		this.itemStack = ItemDatabase.getMaterial(material);
+		this.itemStack = KFCPvP.getInstance().getItemDatabase().getMaterial(material);
 		this.world = world;
 		this.loc = loc;
 	}

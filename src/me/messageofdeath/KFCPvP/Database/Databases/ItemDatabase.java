@@ -1,4 +1,4 @@
-package me.messageofdeath.KFCPvP.Database;
+package me.messageofdeath.KFCPvP.Database.Databases;
 
 import java.util.HashMap;
 
@@ -11,17 +11,17 @@ import me.messageofdeath.KFCPvP.KFCPvP;
 
 public class ItemDatabase {
 
-	private static HashMap<String, ItemStack> itemNames;
+	private HashMap<String, ItemStack> itemNames;
 	
-	private static YamlDatabase items;
+	private YamlDatabase items;
 	
-	protected static void initDatabase() {
-		items = new YamlDatabase(KFCPvP.instance, "items");
+	public void initDatabase() {
+		items = new YamlDatabase(KFCPvP.getInstance(), "items");
 		items.onStartUp();
 		itemNames = new HashMap<String, ItemStack>();
 	}
 	
-	protected static void loadDatabase() {
+	public void loadDatabase() {
 		if(itemNames == null)
 			itemNames = new HashMap<String, ItemStack>();
 		for(String key : items.getSection("")) {
@@ -34,7 +34,7 @@ public class ItemDatabase {
 	
 	//**************** Methods **************
 	
-	public static ItemStack getMaterial(String input) {
+	public ItemStack getMaterial(String input) {
 		if(input != null) {
 			input = input.toUpperCase();
 			Material material = null;

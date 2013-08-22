@@ -1,6 +1,6 @@
 package me.messageofdeath.KFCPvP.Timer;
 
-import me.messageofdeath.KFCPvP.Database.Database;
+import me.messageofdeath.KFCPvP.KFCPvP;
 import me.messageofdeath.KFCPvP.Database.Configuration.ConfigSettings;
 
 public class DatabaseTimer {
@@ -9,7 +9,7 @@ public class DatabaseTimer {
 	
     public static void run() {
     	if(seconds == 60*Integer.parseInt(String.valueOf(ConfigSettings.DatabaseSaveInterval.getSetting()))) {
-    		Database.saveStatDatabase();
+    		KFCPvP.getInstance().getStatDatabase().saveDatabase();
     		seconds = -1;
     	}
     	seconds++;
